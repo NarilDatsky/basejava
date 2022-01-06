@@ -1,13 +1,17 @@
+import java.util.Arrays;
+
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    int storageLength = 10000;
+    Resume[] storage = new Resume[storageLength];
     private int size = 0;
 
     public void clear() {
-        storage = new Resume[10000];
+        Arrays.fill(storage, 0, size - 1, null);
+        size = 0;
     }
 
-    private int update(String uuid) {
-        for (int i = 0; i < size(); i++) {
+    private int getIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].toString().equals(uuid)) {
                 return i;
             }
@@ -16,16 +20,16 @@ public class ArrayStorage {
     }
 
     public void save(Resume r) {
-        if (update(r.toString()) > -1) {
+        if (getIndex(r.toString()) > -1) {
             System.out.println("This resume is present in AS");
         } else {
-            storage[size()] = r;
+            storage[size] = r;
             size++;
         }
     }
 
     public Resume get(String uuid) {
-        int indexOfUuid = update(uuid);
+        int indexOfUuid = getIndex(uuid);
         if (indexOfUuid > -1) {
             return storage[indexOfUuid];
         }
@@ -33,10 +37,10 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
-        int indexOfUuid = update(uuid);
+        int indexOfUuid = getIndex(uuid);
         if (indexOfUuid > -1) {
-            System.arraycopy(storage, indexOfUuid + 1, storage, indexOfUuid, storage.length - 1);
-            storage[9999] = null;
+            System.arraycopy(storage, indexOfUuid + 1, storage, indexOfUuid, size - 1);
+            storage[size - 1] = null;
             size--;
         } else {
             System.out.println("There is no such uuid to delete it");
@@ -44,9 +48,7 @@ public class ArrayStorage {
     }
 
     public Resume[] getAll() {
-        Resume[] result = new Resume[this.size()];
-        System.arraycopy(storage, 0, result, 0, result.length);
-        return result;
+        return Arrays.copyOf(storage, size);
     }
 
     public int size() {
