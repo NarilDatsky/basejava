@@ -1,69 +1,55 @@
-/**
- * Array based storage for Resumes
- */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    private int size = 0;
 
-    void clear() {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null) {
-                storage[i] = null;
+    public void clear() {
+        storage = new Resume[10000];
+    }
+
+    private int update(String uuid) {
+        for (int i = 0; i < size(); i++) {
+            if (storage[i].toString().equals(uuid)) {
+                return i;
             }
-            break;
+        }
+        return -1;
+    }
+
+    public void save(Resume r) {
+        if (update(r.toString()) > -1) {
+            System.out.println("This resume is present in AS");
+        } else {
+            storage[size()] = r;
+            size++;
         }
     }
 
-    void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                break;
-            }
-        }
-    }
-
-    Resume get(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                return null;
-            }
-            if (storage[i].uuid == uuid) {
-                return storage[i];
-            }
+    public Resume get(String uuid) {
+        int indexOfUuid = update(uuid);
+        if (indexOfUuid > -1) {
+            return storage[indexOfUuid];
         }
         return null;
     }
 
-    void delete(String uuid) {
-        int indexOfUuid = -1;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i].toString() == uuid) {
-                indexOfUuid = i;
-                break;
-            }
-        }
+    public void delete(String uuid) {
+        int indexOfUuid = update(uuid);
         if (indexOfUuid > -1) {
             System.arraycopy(storage, indexOfUuid + 1, storage, indexOfUuid, storage.length - 1);
             storage[9999] = null;
+            size--;
+        } else {
+            System.out.println("There is no such uuid to delete it");
         }
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         Resume[] result = new Resume[this.size()];
         System.arraycopy(storage, 0, result, 0, result.length);
         return result;
     }
 
-    int size() {
-        int result;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                return i;
-            }
-        }
-        return storage.length;
+    public int size() {
+        return size;
     }
 }
