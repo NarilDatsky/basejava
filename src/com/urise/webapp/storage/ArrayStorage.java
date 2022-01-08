@@ -1,8 +1,11 @@
+package com.urise.webapp.storage;
+
+import com.urise.webapp.model.Resume;
 import java.util.Arrays;
 
 public class ArrayStorage {
-    int storageLength = 10000;
-    Resume[] storage = new Resume[storageLength];
+    final static int storageLength = 10000;
+    private Resume[] storage = new Resume[storageLength];
     private int size = 0;
 
     public void clear() {
@@ -19,8 +22,20 @@ public class ArrayStorage {
         return -1;
     }
 
+    public void update(Resume r, String uuid) {
+        int elemIndex = getIndex(r.toString());
+        if (elemIndex > -1) {
+            storage[elemIndex].setUuid(uuid);
+        } else {
+            System.out.printf("There is no such element in AS");
+        }
+    }
+
     public void save(Resume r) {
-        if (getIndex(r.toString()) > -1) {
+        if (size >= storageLength) {
+            System.out.printf("Can't save one more element. No free space");
+        }
+        else if (getIndex(r.toString()) > -1) {
             System.out.println("This resume is present in AS");
         } else {
             storage[size] = r;
