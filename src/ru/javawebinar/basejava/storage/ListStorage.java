@@ -46,15 +46,11 @@ public class ListStorage extends AbstractStorage {
   @Override
   public void clear() {
     list.clear();
+    size = 0;
   }
 
   @Override
   public Resume[] getAll() {
     return list.toArray(new Resume[list.size()]);
-  }
-
-  @Override
-  public int size() {
-    return list.size();
   }
 }

@@ -5,19 +5,21 @@ import java.util.UUID;
 public class Resume{
 
     private final String uuid;
-    private String fullName;
+    private final String fullName;
 
-    public Resume() {
-        this(UUID.randomUUID().toString());
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
     }
 
-    public Resume(String uuid) {
+    public Resume(String uuid, String fullName) {
         this.uuid = uuid;
+        this.fullName = fullName;
     }
 
     public String getUuid() {
         return uuid;
     }
+    public String getFullName() { return fullName; }
 
     @Override
     public boolean equals(Object o) {
@@ -26,7 +28,7 @@ public class Resume{
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid);
+        return uuid.equals(resume.uuid) || fullName.equals(resume.fullName);
     }
 
     @Override
